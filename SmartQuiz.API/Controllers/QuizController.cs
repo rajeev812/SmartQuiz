@@ -12,10 +12,12 @@ public class QuizController : ControllerBase
 {
     private const int QuestionsPerQuiz = 20;
     private readonly GeminiQuestionGenerator _generator;
+    private readonly ILogger<QuizController> _logger;
 
-    public QuizController(GeminiQuestionGenerator generator)
+    public QuizController(GeminiQuestionGenerator generator, ILogger<QuizController> logger)
     {
         _generator = generator;
+        _logger = logger;
     }
 
     [HttpPost("start")]
@@ -41,11 +43,13 @@ public class QuizController : ControllerBase
             }
             else
             {
+                _logger.LogWarning("Gemini returned {QuestionCount} valid questions; using fallback questions.", questions.Count);
                 questions = CreateFallbackQuestions(className, subject);
             }
         }
-        catch
+        catch (Exception exception)
         {
+            _logger.LogError(exception, "Quiz question generation failed for board {Board}, class {ClassName}, subject {Subject}.", request.Board, className, subject);
             questions = CreateFallbackQuestions(className, subject);
         }
 
