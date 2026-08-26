@@ -113,7 +113,7 @@ export class QuizComponent {
     }
 
     this.isLoading = true;
-    this.http.post<{ questions: Array<{ question: string; optionA: string; optionB: string; optionC: string; optionD: string; correctAnswer: string; imageUrl?: string; imageAltText?: string }> }>('http://localhost:5080/api/Quiz/start', {
+    this.http.post<{ questions: Array<{ question: string; optionA: string; optionB: string; optionC: string; optionD: string; correctAnswer: string; imageUrl?: string; imageAltText?: string }> }>('http://localhost:5214/api/Quiz/start', {
       studentName: this.studentName,
       board: this.selectedBoard,
       className: this.selectedClass,

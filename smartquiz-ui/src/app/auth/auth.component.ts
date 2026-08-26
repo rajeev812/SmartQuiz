@@ -30,7 +30,7 @@ export class AuthComponent {
       ? { firstName: this.firstName, lastName: this.lastName, email: this.email, password: this.password }
       : { email: this.email, password: this.password };
 
-    this.http.post<{ firstName: string; lastName: string; token: string }>(`http://localhost:5080/api/Auth/${endpoint}`, body).subscribe({
+    this.http.post<{ firstName: string; lastName: string; token: string }>(`http://localhost:5214/api/Auth/${endpoint}`, body).subscribe({
       next: response => {
         localStorage.setItem('smartquiz.studentName', `${response.firstName} ${response.lastName}`.trim());
         localStorage.setItem('smartquiz.token', response.token);
