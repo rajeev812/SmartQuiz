@@ -12,7 +12,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class HomeComponent {
   studentName = localStorage.getItem('smartquiz.studentName') || '';
-  testRecords: Array<{ subject: string; className: string; score: number; total: number; date: string }> = JSON.parse(localStorage.getItem('smartquiz.testRecords') || '[]');
+  private readonly userEmail = localStorage.getItem('smartquiz.userEmail') || '';
+  private readonly testRecordsKey = `smartquiz.testRecords.${encodeURIComponent(this.userEmail.toLowerCase())}`;
+  testRecords: Array<{ subject: string; className: string; score: number; total: number; date: string }> = JSON.parse(localStorage.getItem(this.testRecordsKey) || '[]');
   board = 'CBSE';
   className = 'Class 1';
   subject = 'Mathematics';
@@ -45,6 +47,7 @@ export class HomeComponent {
   logout(): void {
     localStorage.removeItem('smartquiz.token');
     localStorage.removeItem('smartquiz.studentName');
+    localStorage.removeItem('smartquiz.userEmail');
     this.router.navigate(['/auth']);
   }
 

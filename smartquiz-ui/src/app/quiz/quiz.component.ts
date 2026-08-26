@@ -94,6 +94,9 @@ export class QuizComponent {
   certificateNumber = '';
   selectedAnswers: { [key: number]: string } = {};
   imageLoaded = false;
+  private readonly userEmail = localStorage.getItem('smartquiz.userEmail') || '';
+  private readonly quizDraftKey = `smartquiz.quizDraft.${encodeURIComponent(this.userEmail.toLowerCase())}`;
+  private readonly testRecordsKey = `smartquiz.testRecords.${encodeURIComponent(this.userEmail.toLowerCase())}`;
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {
     this.route.queryParams.subscribe(params => {
@@ -159,7 +162,7 @@ export class QuizComponent {
   }
 
   private restoreDraft(): boolean {
-    const rawDraft = localStorage.getItem('smartquiz.quizDraft');
+    const rawDraft = localStorage.getItem(this.quizDraftKey);
     if (!rawDraft) {
       return false;
     }
@@ -177,13 +180,13 @@ export class QuizComponent {
       this.selectedAnswers = draft.selectedAnswers || {};
       return true;
     } catch {
-      localStorage.removeItem('smartquiz.quizDraft');
+      localStorage.removeItem(this.quizDraftKey);
       return false;
     }
   }
 
   private saveDraft(): void {
-    localStorage.setItem('smartquiz.quizDraft', JSON.stringify({
+    localStorage.setItem(this.quizDraftKey, JSON.stringify({
       studentName: this.studentName,
       board: this.selectedBoard,
       className: this.selectedClass,
@@ -224,15 +227,15 @@ export class QuizComponent {
     }
 
     this.isComplete = true;
-    localStorage.removeItem('smartquiz.quizDraft');
+    localStorage.removeItem(this.quizDraftKey);
     this.certificateNumber = `SQ-${Date.now().toString().slice(-8)}`;
     this.saveTestRecord();
   }
 
   private saveTestRecord(): void {
-    const records: TestRecord[] = JSON.parse(localStorage.getItem('smartquiz.testRecords') || '[]');
+    const records: TestRecord[] = JSON.parse(localStorage.getItem(this.testRecordsKey) || '[]');
     records.unshift({ studentName: this.studentName, subject: this.selectedSubject, className: this.selectedClass, score: this.score, total: this.questions.length, date: new Date().toLocaleDateString() });
-    localStorage.setItem('smartquiz.testRecords', JSON.stringify(records.slice(0, 5)));
+    localStorage.setItem(this.testRecordsKey, JSON.stringify(records.slice(0, 5)));
   }
 
   downloadCertificate(): void {

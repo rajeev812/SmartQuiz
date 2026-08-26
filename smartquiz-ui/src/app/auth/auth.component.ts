@@ -33,6 +33,7 @@ export class AuthComponent {
     this.http.post<{ firstName: string; lastName: string; token: string }>(`http://localhost:5214/api/Auth/${endpoint}`, body).subscribe({
       next: response => {
         localStorage.setItem('smartquiz.studentName', `${response.firstName} ${response.lastName}`.trim());
+        localStorage.setItem('smartquiz.userEmail', body.email);
         localStorage.setItem('smartquiz.token', response.token);
         this.router.navigate(['/home']);
       },
