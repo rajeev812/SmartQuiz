@@ -1,0 +1,22 @@
+<main class="auth-page">
+  <section class="auth-card">
+    <p class="eyebrow">SmartQuiz student account</p>
+    <h1>{{ mode === 'register' ? 'Create your account' : 'Welcome back' }}</h1>
+    <p class="intro">Your name will appear on your quiz certificate.</p>
+
+    <form (ngSubmit)="submit()" #authForm="ngForm">
+      <div class="name-fields" *ngIf="mode === 'register'">
+        <input name="firstName" [(ngModel)]="firstName" required placeholder="First name" />
+        <input name="lastName" [(ngModel)]="lastName" placeholder="Last name" />
+      </div>
+      <input name="email" type="email" [(ngModel)]="email" required placeholder="Email address" />
+      <input name="password" type="password" [(ngModel)]="password" required minlength="6" placeholder="Password" />
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <button type="submit" [disabled]="authForm.invalid || isBusy">{{ isBusy ? 'Please wait...' : mode === 'register' ? 'Register' : 'Login' }}</button>
+    </form>
+
+    <button type="button" class="switch-btn" (click)="switchMode()">
+      {{ mode === 'register' ? 'Already registered? Login' : 'New student? Register' }}
+    </button>
+  </section>
+</main>

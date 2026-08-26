@@ -1,0 +1,89 @@
+<section class="quiz-page" *ngIf="!isComplete && !isLoading">
+  <div class="exam-header">
+    <div>
+      <p class="eyebrow">SmartQuiz exam</p>
+      <h1>{{ selectedSubject }}</h1>
+      <p class="exam-context">{{ selectedBoard }} <span>•</span> {{ selectedClass }} <span>•</span> 20 questions</p>
+    </div>
+    <div class="exam-summary">
+      <div class="score-badge">
+        <span>Score</span>
+        <strong>{{ score }}/{{ questions.length }}</strong>
+      </div>
+      <div class="progress-copy">{{ currentIndex + 1 }} of {{ questions.length }}</div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar" [style.width.%]="progressPercent"></div>
+  </div>
+
+  <div class="question-card" *ngIf="currentQuestion">
+    <div class="question-visual" *ngIf="currentQuestion.imageUrl; else noImage">
+      <div class="image-loading" *ngIf="!imageLoaded">Loading picture...</div>
+      <img [src]="currentQuestion.imageUrl" (load)="handleImageLoad()" (error)="handleImageError($event)" [alt]="currentQuestion.imageAltText || ('Illustration for ' + currentQuestion.question)" class="question-image" [class.image-ready]="imageLoaded" loading="eager" />
+      <span class="image-caption">Look, think, and choose!</span>
+    </div>
+    <ng-template #noImage>
+      <div class="question-visual text-visual">
+        <span class="visual-icon">💡</span>
+        <span>Think it through!</span>
+      </div>
+    </ng-template>
+
+    <div class="question-content">
+      <div class="question-top">
+        <span class="question-number">Question {{ currentIndex + 1 }}</span>
+        <span class="subject-tag">{{ selectedSubject }}</span>
+      </div>
+      <h2>{{ currentQuestion.question }}</h2>
+
+      <div class="options-grid">
+        <button
+          type="button"
+          class="option-btn"
+          *ngFor="let option of currentQuestion.options"
+          (click)="chooseAnswer(option.value)"
+        >
+          <span class="option-label">{{ option.label }}</span>
+          <span class="option-text">{{ option.value }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="loading-state" *ngIf="isLoading">
+  <div class="learning-universe" role="status" aria-label="Loading your quiz">
+    <span class="universe-star star-one">✦</span>
+    <span class="universe-star star-two">✧</span>
+    <span class="universe-star star-three">✦</span>
+    <div class="orbit orbit-one"></div>
+    <div class="orbit orbit-two"></div>
+    <div class="loading-planet">🚀</div>
+    <div class="loading-game">🎮</div>
+  </div>
+  <h1>Adventure loading...</h1>
+  <p>Creating 20 unique {{ selectedSubject }} questions for {{ selectedClass }}.</p>
+  <div class="loading-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+</section>
+
+<section class="congrats-page" *ngIf="isComplete">
+  <div class="confetti">🎉 ⭐ 🎓</div>
+  <p class="eyebrow">Quiz completed</p>
+  <h1>Congratulations!</h1>
+  <p>You finished all 20 {{ selectedSubject }} questions.</p>
+  <p class="student-result">Well done, {{ studentName }}!</p>
+  <div class="certificate-card">
+    <span class="certificate-label">SmartQuiz achievement</span>
+    <h2>{{ studentName }}<br />{{ selectedClass }} {{ selectedSubject }} Champion</h2>
+    <strong>{{ score }}/{{ questions.length }}</strong>
+    <small>Certificate {{ certificateNumber }}</small>
+  </div>
+  <div class="completion-actions">
+    <button type="button" class="download-btn" [disabled]="certificateDownloaded" (click)="downloadCertificate()">
+      {{ certificateDownloaded ? 'Certificate Downloaded' : 'Download Certificate' }}
+    </button>
+    <button type="button" class="home-btn" (click)="goHome()">Back to Home</button>
+  </div>
+</section>

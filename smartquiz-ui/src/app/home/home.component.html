@@ -1,0 +1,63 @@
+<main class="home-page">
+  <section class="hero-card">
+    <button type="button" class="logout-btn" (click)="logout()">Log out</button>
+    <div class="hero-copy">
+      <p class="badge">SmartQuiz Kids</p>
+      <h1>Fun learning begins here!</h1>
+      <p class="subtitle">
+        Select your board, class, and subject to start a colorful exam with friendly question design and picture-based learning.
+      </p>
+    </div>
+    <div class="hero-illustration">
+      <div class="planet">🎒</div>
+      <div class="book">📚</div>
+      <div class="star">⭐</div>
+    </div>
+
+    <section class="hero-history" *ngIf="testRecords.length">
+      <div class="hero-history-heading">
+        <span class="history-kicker">Your recent activity</span>
+        <strong>{{ studentName }}</strong>
+      </div>
+      <div class="hero-history-list">
+        <div class="hero-history-row" *ngFor="let record of testRecords | slice:0:3">
+          <span>{{ record.subject }} · {{ record.className }}</span>
+          <b>{{ record.score }}/{{ record.total }}</b>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section class="selector-card">
+    <div class="field-group student-field">
+      <label>Student name</label>
+      <input type="text" [(ngModel)]="studentName" aria-label="Student name" placeholder="Enter your name" maxlength="80" />
+      <small *ngIf="!studentName.trim()">Name is required for your certificate</small>
+    </div>
+
+    <div class="field-group">
+      <label>Board</label>
+      <select [(ngModel)]="board">
+        <option>CBSE</option>
+        <option>ICSE</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label>Class</label>
+      <select [(ngModel)]="className" aria-label="Class">
+        <option *ngFor="let item of classes" [value]="item">{{ item }}</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label>Subject</label>
+      <select [(ngModel)]="subject">
+        <option *ngFor="let item of subjects" [value]="item">{{ item }}</option>
+      </select>
+    </div>
+
+    <button type="button" class="start-btn" (click)="startQuiz()">Start Quiz</button>
+  </section>
+
+</main>

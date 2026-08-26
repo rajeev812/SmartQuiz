@@ -1,0 +1,26 @@
+# .NET build output
+**/bin/
+**/obj/
+
+# Angular and Node output
+node_modules/
+smartquiz-ui/node_modules/
+smartquiz-ui/dist/
+.angular/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+
+# IDE and OS files
+.vs/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+*.user
+*.suo
+.DS_Store
+Thumbs.db
